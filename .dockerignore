@@ -1,4 +1,4 @@
-data/
+.git/
 KIEN_TRUC.MD
 test_scripts/
 venv/
@@ -7,4 +7,3 @@ __pycache__/
 *.log
 *.tmp
 *.pyc
-
