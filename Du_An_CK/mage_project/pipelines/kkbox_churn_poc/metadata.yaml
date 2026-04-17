@@ -1,0 +1,55 @@
+blocks:
+  - all_upstream_blocks_executed: false
+    color: blue
+    configuration: {}
+    downstream_blocks:
+      - build_kkbox_features
+    executor_type: local_python
+    language: python
+    name: load_kkbox_raw
+    status: not_executed
+    type: data_loader
+    upstream_blocks: []
+    uuid: load_kkbox_raw
+  - all_upstream_blocks_executed: false
+    color: teal
+    configuration: {}
+    downstream_blocks:
+      - train_xgboost_model
+    executor_type: local_python
+    language: python
+    name: build_kkbox_features
+    status: not_executed
+    type: transformer
+    upstream_blocks:
+      - load_kkbox_raw
+    uuid: build_kkbox_features
+  - all_upstream_blocks_executed: false
+    color: orange
+    configuration: {}
+    downstream_blocks:
+      - push_features_to_redis
+    executor_type: local_python
+    language: python
+    name: train_xgboost_model
+    status: not_executed
+    type: transformer
+    upstream_blocks:
+      - build_kkbox_features
+    uuid: train_xgboost_model
+  - all_upstream_blocks_executed: false
+    color: pink
+    configuration: {}
+    downstream_blocks: []
+    executor_type: local_python
+    language: python
+    name: push_features_to_redis
+    status: not_executed
+    type: transformer
+    upstream_blocks:
+      - train_xgboost_model
+    uuid: push_features_to_redis
+description: End-to-end KKBox churn pipeline with Mage, MLflow, Redis and BentoML.
+name: kkbox_churn_poc
+type: python
+uuid: kkbox_churn_poc
