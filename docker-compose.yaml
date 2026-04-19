@@ -40,7 +40,7 @@ services:
       - .env
     environment:
       USER_CODE_PATH: /home/src/${MAGE_PROJECT_NAME}
-      MAGE_DATABASE_CONNECTION_URL: postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}
+      MAGE_DATABASE_CONNECTION_URL: postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
       MAGE_ADMIN_EMAIL: ${MAGE_ADMIN_EMAIL}
       MAGE_ADMIN_PASSWORD: ${MAGE_ADMIN_PASSWORD}
       MAGE_ADMIN_USERNAME: ${MAGE_ADMIN_USERNAME}
