@@ -1,5 +1,25 @@
 version: 0.1.1
 default:
+  # CẤU HÌNH POSTGRESQL
+  POSTGRES_CONNECT_TIMEOUT: 10
+  # POSTGRES_SCHEMA: public
+  # POSTGRES_DBNAME: "{{ env_var('DB_NAME') }}"
+  # POSTGRES_USER: "{{ env_var('DB_USER') }}"
+  # POSTGRES_PASSWORD: "{{ env_var('DB_PASSWORD') }}"
+  # POSTGRES_HOST: postgres
+  # POSTGRES_PORT: 5432
+  POSTGRES_USER: "{{ env_var('DB_USER') }}"
+  POSTGRES_PASSWORD: "{{ env_var('DB_PASSWORD') }}"
+  POSTGRES_HOST: "{{ env_var('DB_HOST') }}"
+  POSTGRES_PORT: "{{ env_var('DB_PORT') }}"
+  POSTGRES_DB: "{{ env_var('DB_NAME') }}"
+
+  # CẤU HÌNH MINIO (S3 Compatible)
+  AWS_ACCESS_KEY_ID: "{{ env_var('MINIO_ROOT_USER') }}"
+  AWS_SECRET_ACCESS_KEY: "{{ env_var('MINIO_ROOT_PASSWORD') }}"
+  AWS_ENDPOINT: "http://minio:9000"
+  AWS_REGION: "us-east-1"
+
   # Default profile created for data IO access.
   # Add your credentials for the source you use, and delete the rest.
   # AWS

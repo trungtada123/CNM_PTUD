@@ -1,2 +1,7 @@
 pandas==3.0.2
 seaborn==0.13.2
+redis
+s3fs
+boto3
+pandas
+psycopg2-binary
