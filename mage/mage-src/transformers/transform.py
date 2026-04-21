@@ -5,6 +5,8 @@ if 'transformer' not in globals():
 
 @transformer
 def transform_df(df: DataFrame, *args, **kwargs) -> DataFrame:
+    # print(df)
+    
     # 1. Xử lý missing values
     df['gender'] = df['gender'].fillna('unknown')
     df['city'] = df['city'].fillna(0).astype(int)

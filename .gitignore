@@ -1,4 +1,4 @@
-data/
+data/*.csv
 KIEN_TRUC.MD
 test_scripts/
 venv/
@@ -8,4 +8,5 @@ __pycache__/
 *.tmp
 *.pyc
 .env
+.cache/
 

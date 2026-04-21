@@ -1,0 +1,1 @@
+{"msno": "str", "is_churn": "int64", "city": "int64", "gender": "str", "registered_via": "float64", "actual_amount_paid": "float64", "is_auto_renew": "float64"}
