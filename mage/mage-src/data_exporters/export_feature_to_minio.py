@@ -6,22 +6,22 @@ if 'data_exporter' not in globals():
     from mage_ai.data_preparation.decorators import data_exporter
 
 @data_exporter
-def export_data_to_minio(df: DataFrame, **kwargs) -> None:
+def export_feature_to_minio(df: DataFrame, **kwargs) -> None:
     # Lấy thông tin từ biến môi trường của Mage container
-    minio_user = os.getenv('MINIO_ROOT_USER', 'admin')
-    minio_password = os.getenv('MINIO_ROOT_PASSWORD', 'admin123')
+    minio_user = os.getenv('MINIO_ROOT_USER')
+    minio_password = os.getenv('MINIO_ROOT_PASSWORD')
     
     storage_options = {
         "key": minio_user,
         "secret": minio_password,
         "client_kwargs": {
-            "endpoint_url": "http://minio:9000"
+            "endpoint_url": os.getenv('MINIO_ENDPOINT_URL')
         }
     }
     
     # Tạo S3FileSystem để kiểm tra và tạo bucket
     fs = s3fs.S3FileSystem(**storage_options)
-    bucket_name = "features"
+    bucket_name = os.getenv('MINIO_FEATURES_BUCKET_NAME')
     
     # Kiểm tra và tạo bucket nếu chưa tồn tại
     if not fs.exists(bucket_name):

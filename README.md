@@ -1,7 +1,7 @@
 docker-compose up -d
 
-Services
+Web Services
 
-Mage.ai: http://localhost:6789
-pgAdmin: http://localhost:5050
-Postgres: localhost:5432
+- Mage.ai: http://localhost:6789
+- pgAdmin: http://localhost:5050
+- MinIO: http://localhost:9001

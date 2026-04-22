@@ -1,14 +1,15 @@
 from pandas import DataFrame
 import redis
 import json
+import os
 
 if 'data_exporter' not in globals():
     from mage_ai.data_preparation.decorators import data_exporter
 
 @data_exporter
-def export_data_to_redis(df: DataFrame, **kwargs) -> None:
+def export_feature_to_redis(df: DataFrame, **kwargs) -> None:
     # Kết nối đến Redis container
-    r = redis.Redis(host='redis', port=6379, db=0, decode_responses=True)
+    r = redis.Redis(host=os.getenv('REDIS_HOST'), port=os.getenv('REDIS_PORT'), db=0, decode_responses=True)
     
     # Sử dụng pipeline để tối ưu tốc độ insert (batch insert)
     pipe = r.pipeline()

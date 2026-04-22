@@ -78,6 +78,48 @@ services:
       - minio_data:/data
     command: server /data --console-address ":9001"
 
+  minio-init:
+    image: minio/mc
+    container_name: minio-init
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      mc alias set myminio ${MINIO_ENDPOINT_URL} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      mc mb -p myminio/${MINIO_MODELS_BUCKET_NAME} || true;
+      mc mb -p myminio/${MINIO_FEATURES_BUCKET_NAME} || true;
+      exit 0;
+      "
+
+  mlflow:
+    image: python:3.10-slim
+    container_name: mlflow
+    restart: unless-stopped
+    ports:
+      - "${MLFLOW_PORT:-5000}:5000"
+    environment:
+      # MinIO (như AWS S3)
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      MLFLOW_S3_ENDPOINT_URL: ${MINIO_ENDPOINT_URL}
+      MLFLOW_S3_IGNORE_TLS: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    # MLflow cần thư viện psycopg2 để kết nối Postgres và boto3 để kết nối MinIO
+    command: >
+      bash -c "pip install mlflow psycopg2-binary boto3 && 
+      mlflow server 
+      --host 0.0.0.0 
+      --port 5000 
+      --backend-store-uri ${MLFLOW_BACKEND_STORE_URI} 
+      --default-artifact-root s3://${MINIO_MODELS_BUCKET_NAME}"
+
+
 volumes:
   postgres_data:
   redis_data:
