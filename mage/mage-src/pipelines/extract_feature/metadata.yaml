@@ -3,76 +3,76 @@ blocks:
   color: null
   configuration:
     file_source:
-      path: data_loaders/load_data.py
+      path: data_loaders/load_raw_data.py
   downstream_blocks:
-  - transform
+  - transform_raw_data
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: load_data
+  name: load_raw_data
   retry_config: null
   status: executed
   timeout: null
   type: data_loader
   upstream_blocks: []
-  uuid: load_data
+  uuid: load_raw_data
 - all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:
-      path: transformers/transform.py
+      path: transformers/transform_raw_data.py
   downstream_blocks:
-  - export_data_to_minio
-  - export_data_to_redis
+  - export_feature_to_minio
+  - export_feature_to_redis
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: transform
+  name: transform_raw_data
   retry_config: null
   status: executed
   timeout: null
   type: transformer
   upstream_blocks:
-  - load_data
-  uuid: transform
+  - load_raw_data
+  uuid: transform_raw_data
 - all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:
-      path: data_exporters/export_data_to_minio.py
+      path: data_exporters/export_feature_to_minio.py
   downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: export_data_to_minio
+  name: export_feature_to_minio
   retry_config: null
-  status: not_executed
+  status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
-  - transform
-  uuid: export_data_to_minio
+  - transform_raw_data
+  uuid: export_feature_to_minio
 - all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:
-      path: data_exporters/export_data_to_redis.py
+      path: data_exporters/export_feature_to_redis.py
   downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: export_data_to_redis
+  name: export_feature_to_redis
   retry_config: null
-  status: failed
+  status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
-  - transform
-  uuid: export_data_to_redis
+  - transform_raw_data
+  uuid: export_feature_to_redis
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
