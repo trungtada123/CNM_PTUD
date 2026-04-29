@@ -32,3 +32,4 @@ def export_feature_to_minio(df: DataFrame, **kwargs) -> None:
     file_path = f"s3://{bucket_name}/churn_users_features.parquet"
     df.to_parquet(file_path, storage_options=storage_options, index=False)
     print(f"-- Đã lưu thành công vào MinIO tại {file_path}")
+    

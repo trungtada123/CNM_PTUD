@@ -1,6 +1,6 @@
-pandas==3.0.2
-seaborn==0.13.2
-redis==7.4.0
-s3fs==2026.3.0
-boto3==1.42.91
-psycopg2-binary==2.9.12
+# pandas==3.0.2
+# seaborn==0.13.2
+# redis==7.4.0
+# s3fs==2026.3.0
+# boto3==1.42.91
+# psycopg2-binary==2.9.12
