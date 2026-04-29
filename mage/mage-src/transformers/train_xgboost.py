@@ -31,11 +31,11 @@ def train_xgboost_model(df: DataFrame, *args, **kwargs):
     raw_url = os.getenv('MLFLOW_ENDPOINT_URL', 'http://mlflow:5000') 
     
     parsed_url = urlparse(raw_url)
-    print(parsed_url)
+    # print(parsed_url)
     ip_address = socket.gethostbyname(parsed_url.hostname)
     mlflow_url = f"{parsed_url.scheme}://{ip_address}:{parsed_url.port}"
     
-    print(f"-- kết nối tới MLflow tại IP: {mlflow_url}")
+    # print(f"-- kết nối tới MLflow tại IP: {mlflow_url}")
     mlflow.set_tracking_uri(mlflow_url)
     
     # KÍCH HOẠT KIỂM TRA KẾT NỐI:
@@ -44,7 +44,7 @@ def train_xgboost_model(df: DataFrame, *args, **kwargs):
         client = MlflowClient()
         # Thử lấy danh sách các experiments
         experiments = client.search_experiments()
-        print(f"✅ Kết nối MLflow THÀNH CÔNG! Đã tìm thấy {len(experiments)} experiments.")
+        # print(f"✅ Kết nối MLflow THÀNH CÔNG! Đã tìm thấy {len(experiments)} experiments.")
         
         # Tạo hoặc chọn Experiment (Sổ ghi chép)
         mlflow.set_experiment("Churn_Prediction_KKBox")
@@ -68,6 +68,7 @@ def train_xgboost_model(df: DataFrame, *args, **kwargs):
             model = xgb.XGBClassifier(**params)
             model.fit(X_train, y_train)
             
+            
             # 4. Dự đoán và Đánh giá trên tập Test
             y_pred_proba = model.predict_proba(X_test)[:, 1]
             y_pred = model.predict(X_test)
@@ -78,6 +79,11 @@ def train_xgboost_model(df: DataFrame, *args, **kwargs):
             print(f"-- Kết quả: AUC = {auc:.4f}, F1 = {f1:.4f}")
             
             # Ghi điểm số lên MLflow
+            mlflow.xgboost.log_model(
+                xgb_model=model,
+                artifact_path="model_artifacts",
+                registered_model_name="Churn_Prediction_KKBox"
+            )
             mlflow.log_metric("val_auc", auc)
             mlflow.log_metric("val_f1", f1)
             

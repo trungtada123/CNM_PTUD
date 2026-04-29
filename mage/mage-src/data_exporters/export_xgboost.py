@@ -49,4 +49,3 @@ def export_model_to_minio(model, *args, **kwargs) -> None:
         os.remove(local_file_path)
         
     print(f"Hoàn tất! \nMô hình đã được cất an toàn tại s3://{bucket_name}/{file_name}")
-    
