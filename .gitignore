@@ -1,6 +1,6 @@
 data/*.csv
 KIEN_TRUC.MD
-test_scripts/
+# test_scripts/
 venv/
 __pycache__/
 .ipynb_checkpoints/

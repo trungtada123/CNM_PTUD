@@ -36,7 +36,7 @@ blocks:
   upstream_blocks:
   - load_train_data
   uuid: train_xgboost
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:

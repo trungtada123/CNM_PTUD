@@ -4,3 +4,8 @@
 # s3fs==2026.3.0
 # boto3==1.42.91
 # psycopg2-binary==2.9.12
+bentoml==1.4.38
+scikit-learn==1.7.1
+xgboost==3.2.0
+mlflow==3.11.1
+botocore[crt]==1.42.91

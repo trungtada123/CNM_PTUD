@@ -16,7 +16,6 @@ def train_xgboost_model(df: DataFrame, *args, **kwargs):
     print(f"-- Kích thước dữ liệu nhận được: {df.shape}")
 
     # 1. Tách Features (X) và Target (y)
-    # Giả sử 'msno' là ID khách hàng và 'is_churn' là nhãn (0 hoặc 1)
     X = df.drop(columns=['msno', 'is_churn'])
     y = df['is_churn']
     

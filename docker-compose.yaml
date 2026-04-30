@@ -1,4 +1,5 @@
 services:
+
   postgres:
     image: postgres:15
     container_name: postgres
@@ -30,34 +31,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "${PGADMIN_PORT}:80"
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  mage:
-    build: ./mage
-    container_name: mage
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      USER_CODE_PATH: /home/src/${MAGE_PROJECT_NAME}
-      MAGE_DATABASE_CONNECTION_URL: ${MAGE_DATABASE_CONNECTION_URL}
-      MAGE_ADMIN_EMAIL: ${MAGE_ADMIN_EMAIL}
-      MAGE_ADMIN_PASSWORD: ${MAGE_ADMIN_PASSWORD}
-      MAGE_ADMIN_USERNAME: ${MAGE_ADMIN_USERNAME}
-
-      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
-      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
-      MLFLOW_S3_ENDPOINT_URL: ${MINIO_ENDPOINT_URL}
-      MLFLOW_S3_IGNORE_TLS: "true"
-      
-    ports:
-      - "${MAGE_PORT}:6789"
-    volumes:
-      - ./mage:/home/src
-
-    command: mage start ${MAGE_PROJECT_NAME}
     depends_on:
       postgres:
         condition: service_healthy
@@ -127,6 +100,63 @@ services:
       --backend-store-uri ${MLFLOW_BACKEND_STORE_URI} 
       --default-artifact-root s3://${MINIO_MODELS_BUCKET_NAME}"
 
+  mage:
+    build: ./mage
+    container_name: mage
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      USER_CODE_PATH: /home/src/${MAGE_PROJECT_NAME}
+      MAGE_DATABASE_CONNECTION_URL: ${MAGE_DATABASE_CONNECTION_URL}
+      MAGE_ADMIN_EMAIL: ${MAGE_ADMIN_EMAIL}
+      MAGE_ADMIN_PASSWORD: ${MAGE_ADMIN_PASSWORD}
+      MAGE_ADMIN_USERNAME: ${MAGE_ADMIN_USERNAME}
+
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      MLFLOW_S3_ENDPOINT_URL: ${MINIO_ENDPOINT_URL}
+      MLFLOW_S3_IGNORE_TLS: "true"
+      
+    ports:
+      - "${MAGE_PORT}:6789"
+    volumes:
+      - ./mage:/home/src
+
+    command: mage start ${MAGE_PROJECT_NAME}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      redis:
+        condition: service_started
+      mlflow:
+        condition: service_started
+
+  model-serving:
+    image: churn_prediction_service:latest
+    container_name: model_serving
+    restart: unless-stopped
+    ports:
+      - "${BENTOML_PORT}:3000"
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      MINIO_ENDPOINT_URL: ${MINIO_ENDPOINT_URL}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_MODELS_BUCKET_NAME: ${MINIO_MODELS_BUCKET_NAME}
+      MINIO_FEATURES_BUCKET_NAME: ${MINIO_FEATURES_BUCKET_NAME}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      redis:
+        condition: service_started
+      mlflow:
+        condition: service_started
 
 volumes:
   postgres_data:
