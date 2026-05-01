@@ -1,0 +1,15 @@
+service: "service:ChurnService"
+labels:
+  owner: "mlops_engineer"
+  project: "churn_prediction"
+include:
+  - "*.py"
+python:
+  packages:
+    - xgboost
+    - scikit-learn
+    - numpy
+    - pandas
+    - mlflow
+    - redis
+    # - s3fs
