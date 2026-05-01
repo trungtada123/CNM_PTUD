@@ -22,6 +22,11 @@ Data: https://www.kaggle.com/competitions/kkbox-churn-prediction-challenge/data(
 ├── DESCRIBE.md
 ├── docker-compose.yaml
 ├── KIEN_TRUC.MD
+├── frontend/                 # React UI application
+├── backend/                  # Flask Gateway/API
+├── churn_serving/            # BentoML Service
+│   ├── bentofile.yaml
+│   └── service.py
 ├── mage/
 │   ├── Dockerfile
 │   ├── requirements.txt

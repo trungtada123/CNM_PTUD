@@ -1,3 +1,9 @@
+Require:
+- Docker
+- git bash
+- nodejs
+- python3
+
 Run: `./run.sh`
 Stop: `docker-compose down` or `docker-compose down -v`
 
