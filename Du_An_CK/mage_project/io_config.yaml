@@ -1,0 +1,3 @@
+version: 0.1.1
+default:
+  POSTGRES_CONNECT_TIMEOUT: 10

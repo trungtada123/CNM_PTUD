@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trung tâm điều hành rời bỏ khách hàng KKBox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lora:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', path='dashboard.css') }}" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="dashboard-shell">
+    <header class="hero-panel">
+      <div class="hero-copy">
+        <p class="hero-kicker">Executive Retention Dashboard</p>
+        <h1>Trung tâm điều hành rủi ro rời bỏ khách hàng</h1>
+        <p class="hero-text">
+          Theo dõi toàn cảnh sức khỏe tệp thuê bao, phát hiện sớm nhóm có dấu hiệu rời bỏ
+          và ưu tiên các phân khúc cần chăm sóc trước khi doanh thu bị ảnh hưởng.
+        </p>
+
+        <div class="hero-actions">
+          <a class="primary-action" href="/?refresh=true">Làm mới dữ liệu</a>
+          <a class="secondary-action" href="/api/summary">Xem dữ liệu JSON</a>
+        </div>
+      </div>
+
+      <div class="hero-side">
+        <section class="hero-highlight">
+          <span class="highlight-label">Điểm nhấn vận hành</span>
+          <strong>{{ payload.summary_cards[1].value }}</strong>
+          <p>{{ payload.summary_cards[1].subtitle }}</p>
+        </section>
+
+        <section class="meta-grid">
+          <article class="meta-card">
+            <span>Ngày snapshot</span>
+            <strong>{{ payload.snapshot_date }}</strong>
+          </article>
+          <article class="meta-card">
+            <span>Mô hình đang dùng</span>
+            <strong>{{ payload.model_name }}</strong>
+          </article>
+          <article class="meta-card">
+            <span>Cập nhật lúc</span>
+            <strong>{{ payload.generated_at }}</strong>
+          </article>
+        </section>
+      </div>
+    </header>
+
+    <section class="metrics-grid">
+      {% for card in payload.summary_cards %}
+      <article class="metric-card">
+        <div class="metric-card-top">
+          <span class="metric-label">{{ card.title }}</span>
+          <span class="metric-dot"></span>
+        </div>
+        <h2>{{ card.value }}</h2>
+        <p>{{ card.subtitle }}</p>
+      </article>
+      {% endfor %}
+    </section>
+
+    <section class="insight-grid">
+      {% for item in payload.operational_notes %}
+      <article class="insight-card">
+        <span class="insight-title">{{ item.title }}</span>
+        <strong>{{ item.value }}</strong>
+        <p>{{ item.description }}</p>
+      </article>
+      {% endfor %}
+    </section>
+
+    <section class="overview-grid">
+      <article class="panel panel-rich">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">Tổng quan rủi ro</p>
+            <h3>Phân tầng khách hàng theo điểm churn</h3>
+          </div>
+          <span class="panel-note">Dựa trên mô hình Production hiện tại</span>
+        </div>
+
+        <div class="bar-stack">
+          {% for item in payload.risk_overview %}
+          <div class="bar-item">
+            <div class="bar-label-row">
+              <span>{{ item.label }}</span>
+              <span>{{ item.count }} khách hàng • {{ item.pct }}%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill risk-{{ item.css_class }}" style="width: {{ item.pct }}%;"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </article>
+
+      <article class="panel panel-rich">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">Tín hiệu hành vi</p>
+            <h3>Các cảnh báo cần hành động sớm</h3>
+          </div>
+          <span class="panel-note">Ưu tiên cho đội retention và CRM</span>
+        </div>
+
+        <div class="bar-stack">
+          {% for item in payload.behavior_flags %}
+          <div class="bar-item">
+            <div class="bar-label-row">
+              <span>{{ item.label }}</span>
+              <span>{{ item.count }} khách hàng • {{ item.pct }}%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill neutral" style="width: {{ item.pct }}%;"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </article>
+    </section>
+
+    <section class="segments-grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">Phân khúc</p>
+            <h3>Thành phố nổi bật</h3>
+          </div>
+          <span class="panel-note">Nơi tập trung nhiều người dùng nhất</span>
+        </div>
+
+        <ul class="rank-list">
+          {% for item in payload.segments.city %}
+          <li>
+            <span>{{ item.label }}</span>
+            <strong>{{ item.count }} • {{ item.pct }}%</strong>
+          </li>
+          {% endfor %}
+        </ul>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">Nhân khẩu học</p>
+            <h3>Cơ cấu giới tính</h3>
+          </div>
+          <span class="panel-note">Dữ liệu sau bước làm sạch</span>
+        </div>
+
+        <ul class="rank-list">
+          {% for item in payload.segments.gender %}
+          <li>
+            <span>{{ item.label }}</span>
+            <strong>{{ item.count }} • {{ item.pct }}%</strong>
+          </li>
+          {% endfor %}
+        </ul>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">Thanh toán</p>
+            <h3>Phương thức phổ biến</h3>
+          </div>
+          <span class="panel-note">Dấu hiệu hành vi chi trả gần nhất</span>
+        </div>
+
+        <ul class="rank-list">
+          {% for item in payload.segments.payment_method %}
+          <li>
+            <span>{{ item.label }}</span>
+            <strong>{{ item.count }} • {{ item.pct }}%</strong>
+          </li>
+          {% endfor %}
+        </ul>
+      </article>
+    </section>
+
+    <section class="panel watchlist-panel">
+      <div class="panel-heading watchlist-heading">
+        <div>
+          <p class="section-label">Danh sách hành động</p>
+          <h3>Watchlist ưu tiên chăm sóc</h3>
+          <span class="panel-note">Nhóm khách hàng có xác suất churn cao nhất ở thời điểm hiện tại.</span>
+        </div>
+        <div class="watchlist-chip">Top {{ payload.watchlist|length }} khách hàng</div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã khách hàng</th>
+              <th>Mức độ</th>
+              <th>Điểm churn</th>
+              <th>Thành phố</th>
+              <th>Giới tính</th>
+              <th>Ngày nghe 30D</th>
+              <th>Tỷ lệ sụt giảm</th>
+              <th>Số giao dịch</th>
+              <th>Tháng sử dụng</th>
+              <th>Đã hủy gói</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in payload.watchlist %}
+            <tr>
+              <td class="mono" title="{{ row.msno }}">{{ row.msno[:14] }}...{{ row.msno[-8:] }}</td>
+              <td><span class="badge badge-{{ row.risk_band }}">{{ row.risk_band_label }}</span></td>
+              <td>{{ row.churn_probability }}</td>
+              <td>{{ row.city }}</td>
+              <td>{{ row.gender }}</td>
+              <td>{{ row.listen_days_30d }}</td>
+              <td>{{ row.engagement_drop_ratio }}</td>
+              <td>{{ row.transaction_count }}</td>
+              <td>{{ row.service_months }}</td>
+              <td>{{ row.had_cancel }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,1 +1,23 @@
-data/
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# CSV data files to exclude
+data/members_v3.csv
+data/train_v2.csv
+data/transactions_v2.csv
+data/user_logs_v2.csv
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
