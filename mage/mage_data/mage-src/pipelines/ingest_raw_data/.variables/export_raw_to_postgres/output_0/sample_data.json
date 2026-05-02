@@ -1,0 +1,1 @@
+{"load_summary": [{"table_name": "members", "rows_copied": 6769473}, {"table_name": "train_label", "rows_copied": 970960}, {"table_name": "transactions", "rows_copied": 1431009}, {"table_name": "user_logs", "rows_copied": 18396362}]}
