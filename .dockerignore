@@ -1,0 +1,9 @@
+.git/
+KIEN_TRUC.MD
+test_scripts/
+venv/
+__pycache__/
+.ipynb_checkpoints/
+*.log
+*.tmp
+*.pyc
